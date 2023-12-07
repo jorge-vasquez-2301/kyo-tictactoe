@@ -12,6 +12,8 @@ final case class Board(fields: Map[Field, Piece]):
 
   val isFull: Boolean = self.fields.size == Field.values.size
 
+  def isPieceWinner(piece: Piece): Boolean = Board.wins.exists(_ subsetOf self.fieldsOccupiedByPiece(piece))
+
   val unoccupiedFields: List[Field] = (Field.values.toSet -- self.fields.keySet).toList.sortBy(_.ordinal)
 
   def updated(field: Field, piece: Piece): Board = Board(self.fields.updated(field, piece))

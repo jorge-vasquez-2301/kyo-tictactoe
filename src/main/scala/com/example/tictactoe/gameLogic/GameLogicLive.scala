@@ -11,8 +11,8 @@ final class GameLogicLive() extends GameLogic:
     else Aborts[AppError].fail(AppError.FieldAlreadyOccupiedError)
 
   def gameResult(board: Board): GameResult > IOs =
-    val crossWin  = Board.wins.exists(_ subsetOf board.fieldsOccupiedByPiece(Piece.X))
-    val noughtWin = Board.wins.exists(_ subsetOf board.fieldsOccupiedByPiece(Piece.O))
+    val crossWin  = board.isPieceWinner(Piece.X)
+    val noughtWin = board.isPieceWinner(Piece.O)
 
     if crossWin && noughtWin then
       IOs.fail {

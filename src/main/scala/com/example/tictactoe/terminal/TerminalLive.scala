@@ -9,7 +9,7 @@ final class TerminalLive() extends Terminal:
   override val getUserInput: String > Consoles = Consoles.readln
 
   override def display(frame: String): Unit > Consoles =
-    Consoles.print(ansiClearScreen).map(_ => Consoles.println(frame))
+    Consoles.print(ansiClearScreen).andThen(Consoles.println(frame))
 
 object TerminalLive:
   final val ansiClearScreen = "\u001b[H\u001b[2J"

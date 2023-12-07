@@ -11,9 +11,9 @@ import kyo.options.*
 final case class ControllerLive(confirmMode: ConfirmMode, gameMode: GameMode, menuMode: MenuMode) extends Controller:
   def process(input: String, state: State): State > (Options & IOs) =
     state match
-      case s: State.Confirm => Options.get(Some(confirmMode.process(input, s)))
-      case s: State.Game    => gameMode.process(input, s).map(s => Options.get(Some(s)))
-      case s: State.Menu    => Options.get(Some(menuMode.process(input, s)))
+      case s: State.Confirm => confirmMode.process(input, s)
+      case s: State.Game    => gameMode.process(input, s)
+      case s: State.Menu    => menuMode.process(input, s)
       case State.Shutdown   => Options.get(None)
 
   def render(state: State): String =

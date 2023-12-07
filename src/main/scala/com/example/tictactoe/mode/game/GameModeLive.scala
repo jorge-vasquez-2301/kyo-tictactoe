@@ -17,15 +17,12 @@ final case class GameModeLive(
 ) extends GameMode:
   def process(input: String, state: State.Game): State > IOs =
     if state.result != GameResult.Ongoing then State.Menu(None, MenuFooterMessage.Empty)
-    else if isAiTurn(state) then
-      opponentAi
-        .randomMove(state.board)
-        .flatMap(takeField(_, state))
+    else if isAiTurn(state) then opponentAi.randomMove(state.board).map(takeField(_, state))
     else
       Aborts[AppError].run {
         gameCommandParser
           .parse(input)
-          .flatMap {
+          .map {
             case GameCommand.Menu       => State.Menu(Some(state), MenuFooterMessage.Empty)
             case GameCommand.Put(field) => takeField(field, state)
           }

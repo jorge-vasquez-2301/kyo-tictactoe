@@ -10,7 +10,7 @@ import com.example.tictactoe.opponentAi.OpponentAiLive
 import com.example.tictactoe.parser.confirm.ConfirmCommandParserLive
 import com.example.tictactoe.parser.game.GameCommandParserLive
 import com.example.tictactoe.parser.menu.MenuCommandParserLive
-import com.example.tictactoe.runLoop.{RunLoop, RunLoopLive}
+import com.example.tictactoe.runLoop.{ RunLoop, RunLoopLive }
 import com.example.tictactoe.terminal.TerminalLive
 import com.example.tictactoe.view.confirm.ConfirmViewLive
 import com.example.tictactoe.view.game.GameViewLive
@@ -24,7 +24,7 @@ import kyo.options.*
 object TicTacToe extends App:
 
   override def run(args: List[String]): Unit > App.Effects =
-    Envs[RunLoop].run(runLoop)(program).map(_ => ())
+    Envs[RunLoop].run(runLoop)(program).unit
 
   val program: State > (Envs[RunLoop] & Consoles) =
     def loop(state: State): State > (Envs[RunLoop] & Consoles) =
