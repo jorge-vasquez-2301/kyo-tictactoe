@@ -1,7 +1,6 @@
 package com.example.tictactoe.view.game
 
-import com.example.tictactoe.domain.Board.Field
-import com.example.tictactoe.domain.{ GameFooterMessage, GameResult, Piece, Player }
+import com.example.tictactoe.domain.*
 
 final class GameViewLive() extends GameView:
   def header(result: GameResult, turn: Piece, player: Player): String =
@@ -23,9 +22,9 @@ final class GameViewLive() extends GameView:
            |
            |Press <enter> to continue.""".stripMargin
 
-  def content(board: Map[Field, Piece], result: GameResult): String =
+  def content(board: Board, result: GameResult): String =
     Field.values
-      .map(field => board.get(field) -> field.ordinal)
+      .map(field => board.fields.get(field) -> field.ordinal)
       .map {
         case (Some(piece), _) => piece.toString
         case (None, value)    => value.toString

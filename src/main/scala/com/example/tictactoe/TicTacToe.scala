@@ -10,7 +10,7 @@ import com.example.tictactoe.opponentAi.OpponentAiLive
 import com.example.tictactoe.parser.confirm.ConfirmCommandParserLive
 import com.example.tictactoe.parser.game.GameCommandParserLive
 import com.example.tictactoe.parser.menu.MenuCommandParserLive
-import com.example.tictactoe.runLoop.{ RunLoop, RunLoopLive }
+import com.example.tictactoe.runLoop.{RunLoop, RunLoopLive}
 import com.example.tictactoe.terminal.TerminalLive
 import com.example.tictactoe.view.confirm.ConfirmViewLive
 import com.example.tictactoe.view.game.GameViewLive

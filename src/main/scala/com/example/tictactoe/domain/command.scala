@@ -1,7 +1,5 @@
 package com.example.tictactoe.domain
 
-import com.example.tictactoe.domain.Board.Field
-
 enum ConfirmCommand:
   case Yes
   case No

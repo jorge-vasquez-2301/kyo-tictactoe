@@ -1,22 +1,23 @@
 package com.example.tictactoe.domain
 
-import scala.util.Try
+final case class Board(fields: Map[Field, Piece]):
+  self =>
+
+  def fieldIsFree(field: Field): Boolean = !self.fields.contains(field)
+
+  def fieldsOccupiedByPiece(piece: Piece): Set[Field] =
+    self.fields.collect { case (field, `piece`) =>
+      field
+    }.toSet
+
+  val isFull: Boolean = self.fields.size == Field.values.size
+
+  val unoccupiedFields: List[Field] = (Field.values.toSet -- self.fields.keySet).toList.sortBy(_.ordinal)
+
+  def updated(field: Field, piece: Piece): Board = Board(self.fields.updated(field, piece))
 
 object Board:
-
-  enum Field:
-    case NorthWest
-    case North
-    case NorthEast
-    case West
-    case Center
-    case East
-    case SouthWest
-    case South
-    case SouthEast
-  object Field:
-    def make(value: String): Option[Field] =
-      value.toIntOption.flatMap(v => Try(Field.fromOrdinal(v)).toOption)
+  val empty: Board = Board(Map.empty)
 
   val wins: Set[Set[Field]] =
     val horizontalWins = Set(

@@ -1,6 +1,6 @@
 package com.example.tictactoe.view.confirm
 
-import com.example.tictactoe.domain.{ ConfirmAction, ConfirmFooterMessage }
+import com.example.tictactoe.domain.{ConfirmAction, ConfirmFooterMessage}
 
 trait ConfirmView:
   def header(action: ConfirmAction): String

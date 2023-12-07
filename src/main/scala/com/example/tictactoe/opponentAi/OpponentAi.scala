@@ -1,9 +1,8 @@
 package com.example.tictactoe.opponentAi
 
-import com.example.tictactoe.domain.Board.Field
-import com.example.tictactoe.domain.Piece
+import com.example.tictactoe.domain.{Board, Field}
 import kyo.*
 import kyo.ios.*
 
 trait OpponentAi:
-  def randomMove(board: Map[Field, Piece]): Field > IOs
+  def randomMove(board: Board): Field > IOs

@@ -1,29 +1,18 @@
 package com.example.tictactoe.gameLogic
 
-import com.example.tictactoe.domain.Board.Field
-import com.example.tictactoe.domain.{ AppError, Board, GameResult, Piece }
+import com.example.tictactoe.domain.*
 import kyo.*
-import kyo.ios.*
 import kyo.aborts.*
+import kyo.ios.*
 
 final class GameLogicLive() extends GameLogic:
-  def putPiece(board: Map[Field, Piece], field: Field, piece: Piece): Map[Field, Piece] > Aborts[AppError] =
-    board.get(field) match
-      case None => board.updated(field, piece)
-      case _    => Aborts[AppError].fail(AppError.FieldAlreadyOccupiedError)
+  def putPiece(board: Board, field: Field, piece: Piece): Board > Aborts[AppError] =
+    if board.fieldIsFree(field) then board.updated(field, piece)
+    else Aborts[AppError].fail(AppError.FieldAlreadyOccupiedError)
 
-  def gameResult(board: Map[Field, Piece]): GameResult > IOs =
-    val pieces: Map[Piece, Set[Field]] =
-      board
-        .groupBy(_._2)
-        .view
-        .mapValues(_.keys.toSet)
-        .toMap
-        .withDefaultValue(Set.empty)
-
-    val crossWin  = Board.wins.exists(_ subsetOf pieces(Piece.X))
-    val noughtWin = Board.wins.exists(_ subsetOf pieces(Piece.O))
-    val boardFull = board.size == 9
+  def gameResult(board: Board): GameResult > IOs =
+    val crossWin  = Board.wins.exists(_ subsetOf board.fieldsOccupiedByPiece(Piece.X))
+    val noughtWin = Board.wins.exists(_ subsetOf board.fieldsOccupiedByPiece(Piece.O))
 
     if crossWin && noughtWin then
       IOs.fail {
@@ -31,7 +20,7 @@ final class GameLogicLive() extends GameLogic:
       }
     else if crossWin then GameResult.Win(Piece.X)
     else if noughtWin then GameResult.Win(Piece.O)
-    else if boardFull then GameResult.Draw
+    else if board.isFull then GameResult.Draw
     else GameResult.Ongoing
 
   def nextTurn(currentTurn: Piece): Piece =

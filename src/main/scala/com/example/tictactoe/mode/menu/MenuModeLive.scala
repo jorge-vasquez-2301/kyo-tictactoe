@@ -15,7 +15,7 @@ final case class MenuModeLive(menuCommandParser: MenuCommandParser, menuView: Me
           case MenuCommand.NewGame =>
             val newGameState =
               State.Game(
-                Map.empty,
+                Board.empty,
                 Player.Human,
                 Player.Ai,
                 Piece.X,

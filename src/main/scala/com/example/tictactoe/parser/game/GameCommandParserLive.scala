@@ -2,8 +2,7 @@ package com.example.tictactoe.parser.game
 
 import atto.Atto.*
 import atto.Parser
-import com.example.tictactoe.domain.Board.Field
-import com.example.tictactoe.domain.{ AppError, GameCommand }
+import com.example.tictactoe.domain.{AppError, Field, GameCommand}
 import kyo.*
 import kyo.aborts.*
 

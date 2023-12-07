@@ -1,7 +1,7 @@
 package com.example.tictactoe.runLoop
 
 import com.example.tictactoe.controller.Controller
-import com.example.tictactoe.domain.{ AppError, State }
+import com.example.tictactoe.domain.State
 import com.example.tictactoe.terminal.Terminal
 import kyo.*
 import kyo.consoles.*

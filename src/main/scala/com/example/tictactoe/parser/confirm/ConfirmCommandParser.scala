@@ -1,6 +1,6 @@
 package com.example.tictactoe.parser.confirm
 
-import com.example.tictactoe.domain.{ AppError, ConfirmCommand }
+import com.example.tictactoe.domain.{AppError, ConfirmCommand}
 import kyo.*
 import kyo.aborts.*
 

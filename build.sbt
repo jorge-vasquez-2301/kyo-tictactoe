@@ -8,5 +8,9 @@ lazy val root = (project in file("."))
     libraryDependencies ++= Seq(
       "io.getkyo"    %% "kyo-core"  % "0.7.2",
       "org.tpolecat" %% "atto-core" % "0.9.5"
+    ),
+    scalacOptions ++= Seq(
+      "-Wunused:all",
+      "-Werror"
     )
   )

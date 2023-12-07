@@ -1,6 +1,6 @@
 package com.example.tictactoe.parser.menu
 
-import com.example.tictactoe.domain.{ AppError, MenuCommand }
+import com.example.tictactoe.domain.{AppError, MenuCommand}
 import kyo.*
 import kyo.aborts.*
 
