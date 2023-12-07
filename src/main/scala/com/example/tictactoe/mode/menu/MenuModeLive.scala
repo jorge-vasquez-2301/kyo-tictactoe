@@ -18,7 +18,7 @@ final case class MenuModeLive(menuCommandParser: MenuCommandParser, menuView: Me
                 Map.empty,
                 Player.Human,
                 Player.Ai,
-                Piece.Cross,
+                Piece.X,
                 GameResult.Ongoing,
                 GameFooterMessage.Empty
               )

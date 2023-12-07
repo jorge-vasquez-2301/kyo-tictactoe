@@ -33,8 +33,8 @@ final case class GameModeLive(
       }.map(_.toOption.getOrElse(state.copy(footerMessage = GameFooterMessage.InvalidCommand)))
 
   private def isAiTurn(state: State.Game): Boolean =
-    (state.turn == Piece.Cross && state.cross == Player.Ai) ||
-      (state.turn == Piece.Nought && state.nought == Player.Ai)
+    (state.turn == Piece.X && state.cross == Player.Ai) ||
+      (state.turn == Piece.O && state.nought == Player.Ai)
 
   private def takeField(field: Field, state: State.Game): State > IOs =
     Aborts[AppError].run {
@@ -51,7 +51,7 @@ final case class GameModeLive(
     }.map(_.toOption.getOrElse(state.copy(footerMessage = GameFooterMessage.FieldOccupied)))
 
   def render(state: State.Game): String =
-    val player = if state.turn == Piece.Cross then state.cross else state.nought
+    val player = if state.turn == Piece.X then state.cross else state.nought
     List(
       gameView.header(state.result, state.turn, player),
       gameView.content(state.board, state.result),

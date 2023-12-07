@@ -21,20 +21,20 @@ final class GameLogicLive() extends GameLogic:
         .toMap
         .withDefaultValue(Set.empty)
 
-    val crossWin  = Board.wins.exists(_ subsetOf pieces(Piece.Cross))
-    val noughtWin = Board.wins.exists(_ subsetOf pieces(Piece.Nought))
+    val crossWin  = Board.wins.exists(_ subsetOf pieces(Piece.X))
+    val noughtWin = Board.wins.exists(_ subsetOf pieces(Piece.O))
     val boardFull = board.size == 9
 
     if crossWin && noughtWin then
       IOs.fail {
         IllegalStateException("It should not be possible for both players to meet winning conditions.")
       }
-    else if crossWin then GameResult.Win(Piece.Cross)
-    else if noughtWin then GameResult.Win(Piece.Nought)
+    else if crossWin then GameResult.Win(Piece.X)
+    else if noughtWin then GameResult.Win(Piece.O)
     else if boardFull then GameResult.Draw
     else GameResult.Ongoing
 
   def nextTurn(currentTurn: Piece): Piece =
     currentTurn match
-      case Piece.Cross  => Piece.Nought
-      case Piece.Nought => Piece.Cross
+      case Piece.X => Piece.O
+      case Piece.O => Piece.X

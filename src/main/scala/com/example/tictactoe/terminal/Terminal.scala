@@ -1,8 +1,8 @@
 package com.example.tictactoe.terminal
 
 import kyo.*
-import kyo.ios.*
+import kyo.consoles.*
 
 trait Terminal:
-  def getUserInput: String > IOs
-  def display(frame: String): Unit > IOs
+  def getUserInput: String > Consoles
+  def display(frame: String): Unit > Consoles

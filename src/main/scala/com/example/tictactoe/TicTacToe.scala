@@ -16,38 +16,43 @@ import com.example.tictactoe.view.confirm.ConfirmViewLive
 import com.example.tictactoe.view.game.GameViewLive
 import com.example.tictactoe.view.menu.MenuViewLive
 import kyo.*
-import kyo.App.Effects
+import kyo.consoles.*
+import kyo.envs.*
+import kyo.ios.*
+import kyo.options.*
 
 object TicTacToe extends App:
 
-  override def run(args: List[String]): Unit > Effects = ???
+  override def run(args: List[String]): Unit > App.Effects =
+    Envs[RunLoop].run(runLoop)(program).map(_ => ())
 
-  // val program: URIO[RunLoop, Unit] = {
-  //   def loop(state: State): URIO[RunLoop, Unit] =
-  //     RunLoop
-  //       .step(state)
-  //       .some
-  //       .flatMap(loop)
-  //       .ignore
+  val program: State > (Envs[RunLoop] & Consoles) =
+    def loop(state: State): State > (Envs[RunLoop] & Consoles) =
+      IOs {
+        Options.run(Envs[RunLoop].get.map(_.step(state))).map {
+          case Some(nextState) => loop(nextState)
+          case None            => state
+        }
+      }
 
-  //   loop(State.initial)
-  // }
+    loop(State.initial)
 
-  // val run =
-  //   program
-  //     .provide(
-  //       ControllerLive.layer,
-  //       GameLogicLive.layer,
-  //       ConfirmModeLive.layer,
-  //       GameModeLive.layer,
-  //       MenuModeLive.layer,
-  //       OpponentAiLive.layer,
-  //       ConfirmCommandParserLive.layer,
-  //       GameCommandParserLive.layer,
-  //       MenuCommandParserLive.layer,
-  //       RunLoopLive.layer,
-  //       TerminalLive.layer,
-  //       ConfirmViewLive.layer,
-  //       GameViewLive.layer,
-  //       MenuViewLive.layer
-  //     )
+  val runLoop =
+    val confirmCommandParser = ConfirmCommandParserLive()
+    val confirmView          = ConfirmViewLive()
+    val confirmMode          = ConfirmModeLive(confirmCommandParser, confirmView)
+
+    val gameCommandParser = GameCommandParserLive()
+    val gameView          = GameViewLive()
+    val opponentAi        = OpponentAiLive()
+    val gameLogic         = GameLogicLive()
+    val gameMode          = GameModeLive(gameCommandParser, gameView, opponentAi, gameLogic)
+
+    val menuCommandParser = MenuCommandParserLive()
+    val menuView          = MenuViewLive()
+    val menuMode          = MenuModeLive(menuCommandParser, menuView)
+
+    val controller = ControllerLive(confirmMode, gameMode, menuMode)
+    val terminal   = TerminalLive()
+
+    RunLoopLive(controller, terminal)
