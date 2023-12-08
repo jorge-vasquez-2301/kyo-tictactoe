@@ -10,7 +10,6 @@ import com.example.tictactoe.opponentAi.OpponentAiLive
 import com.example.tictactoe.parser.confirm.ConfirmCommandParserLive
 import com.example.tictactoe.parser.game.GameCommandParserLive
 import com.example.tictactoe.parser.menu.MenuCommandParserLive
-import com.example.tictactoe.runLoop.{ RunLoop, RunLoopLive }
 import com.example.tictactoe.terminal.TerminalLive
 import com.example.tictactoe.view.confirm.ConfirmViewLive
 import com.example.tictactoe.view.game.GameViewLive
@@ -20,16 +19,22 @@ import kyo.consoles.*
 import kyo.envs.*
 import kyo.ios.*
 import kyo.options.*
+import com.example.tictactoe.terminal.Terminal
+import com.example.tictactoe.controller.Controller
 
 object TicTacToe extends App:
 
   override def run(args: List[String]): Unit > App.Effects =
-    Envs[RunLoop].run(runLoop)(program).unit
+    Envs[Terminal]
+      .run(TerminalLive()) {
+        Envs[Controller].run[State, Envs[Terminal] & Consoles](controller)(program)
+      }
+      .unit
 
-  val program: State > (Envs[RunLoop] & Consoles) =
-    def loop(state: State): State > (Envs[RunLoop] & Consoles) =
+  val program: State > (Envs[Terminal] & Envs[Controller] & Consoles) =
+    def loop(state: State): State > (Envs[Terminal] & Envs[Controller] & Consoles) =
       IOs {
-        Options.run(Envs[RunLoop].get.map(_.step(state))).map {
+        Options.run[State, Envs[Terminal] & Envs[Controller] & Consoles](step(state)).map {
           case Some(nextState) => loop(nextState)
           case None            => state
         }
@@ -37,7 +42,16 @@ object TicTacToe extends App:
 
     loop(State.initial)
 
-  val runLoop =
+  def step(state: State): State > (Envs[Terminal] & Envs[Controller] & Options & Consoles) =
+    for
+      terminal   <- Envs[Terminal].get
+      controller <- Envs[Controller].get
+      _          <- terminal.display(controller.render(state))
+      input      <- if state == State.Shutdown then "" else terminal.getUserInput
+      nextState  <- controller.process(input, state)
+    yield nextState
+
+  val controller =
     val confirmCommandParser = ConfirmCommandParserLive()
     val confirmView          = ConfirmViewLive()
     val confirmMode          = ConfirmModeLive(confirmCommandParser, confirmView)
@@ -52,7 +66,4 @@ object TicTacToe extends App:
     val menuView          = MenuViewLive()
     val menuMode          = MenuModeLive(menuCommandParser, menuView)
 
-    val controller = ControllerLive(confirmMode, gameMode, menuMode)
-    val terminal   = TerminalLive()
-
-    RunLoopLive(controller, terminal)
+    ControllerLive(confirmMode, gameMode, menuMode)
