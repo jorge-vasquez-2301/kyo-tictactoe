@@ -16,8 +16,9 @@ final case class GameCommandParserLive() extends GameCommandParser:
     Parser.string("menu", GameCommand.Menu)
 
   private lazy val put: Parser[String, Char, GameCommand] =
-    Parser.digit.flatMap { value =>
-      Field
-        .make(value)
-        .fold(Parser.fail(s"Invalid field value: $value"))(field => Parser.succeed(GameCommand.Put(field)))
-    }
+    for
+      digit   <- Parser.digit
+      command <- Field.make(digit) match
+                   case Some(field) => Parser.succeed(GameCommand.Put(field))
+                   case None        => Parser.fail(s"Invalid field value: $digit")
+    yield command
