@@ -14,5 +14,5 @@ enum Field:
   case SouthEast
 
 object Field:
-  def make(value: String): Option[Field] =
-    value.toIntOption.flatMap(v => Try(Field.fromOrdinal(v)).toOption)
+  def make(value: Char): Option[Field] =
+    Try(Field.fromOrdinal(value.toInt - 48)).toOption

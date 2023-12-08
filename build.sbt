@@ -6,8 +6,8 @@ lazy val root = (project in file("."))
   .settings(
     name := "kyo-tictactoe",
     libraryDependencies ++= Seq(
-      "io.getkyo"    %% "kyo-core"  % "0.7.2",
-      "org.tpolecat" %% "atto-core" % "0.9.5"
+      "io.getkyo" %% "kyo-core"   % "0.7.2",
+      "dev.zio"   %% "zio-parser" % "0.1.9"
     ),
     scalacOptions ++= Seq(
       "-Wunused:all",
