@@ -8,7 +8,7 @@ import kyo.*
 import kyo.ios.*
 import kyo.options.*
 
-final case class ControllerLive(confirmMode: ConfirmMode, gameMode: GameMode, menuMode: MenuMode) extends Controller:
+final class ControllerLive(confirmMode: ConfirmMode, gameMode: GameMode, menuMode: MenuMode) extends Controller:
   def process(input: String, state: State): State > (Options & IOs) =
     state match
       case s: State.Confirm => confirmMode.process(input, s)

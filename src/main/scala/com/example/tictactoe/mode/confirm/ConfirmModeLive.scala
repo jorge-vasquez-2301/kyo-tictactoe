@@ -6,8 +6,7 @@ import com.example.tictactoe.view.confirm.ConfirmView
 import kyo.*
 import kyo.aborts.*
 
-final case class ConfirmModeLive(confirmCommandParser: ConfirmCommandParser, confirmView: ConfirmView)
-    extends ConfirmMode:
+final class ConfirmModeLive(confirmCommandParser: ConfirmCommandParser, confirmView: ConfirmView) extends ConfirmMode:
   def process(input: String, state: State.Confirm): State =
     Aborts[AppError].run {
       confirmCommandParser

@@ -9,7 +9,7 @@ import kyo.*
 import kyo.aborts.*
 import kyo.ios.*
 
-final case class GameModeLive(
+final class GameModeLive(
   gameCommandParser: GameCommandParser,
   gameView: GameView,
   opponentAi: OpponentAi,

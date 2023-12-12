@@ -5,7 +5,7 @@ import kyo.*
 import kyo.aborts.*
 import zio.parser.*
 
-final case class GameCommandParserLive() extends GameCommandParser:
+final class GameCommandParserLive() extends GameCommandParser:
   def parse(input: String): GameCommand > Aborts[AppError] =
     command.parseString(input).toOption.getOrElse(Aborts[AppError].fail(AppError.ParseError))
 

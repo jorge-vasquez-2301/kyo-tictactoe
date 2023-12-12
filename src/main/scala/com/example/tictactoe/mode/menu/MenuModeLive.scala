@@ -6,7 +6,7 @@ import com.example.tictactoe.view.menu.MenuView
 import kyo.*
 import kyo.aborts.*
 
-final case class MenuModeLive(menuCommandParser: MenuCommandParser, menuView: MenuView) extends MenuMode:
+final class MenuModeLive(menuCommandParser: MenuCommandParser, menuView: MenuView) extends MenuMode:
   def process(input: String, state: State.Menu): State =
     Aborts[AppError].run {
       menuCommandParser
