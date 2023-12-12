@@ -19,21 +19,27 @@ final class GameModeLive(
     if state.result != GameResult.Ongoing then State.Menu(None, MenuFooterMessage.Empty)
     else if isAiTurn(state) then opponentAi.randomMove(state.board).map(takeField(_, state))
     else
-      Aborts[AppError].run {
+      val parseInput =
         gameCommandParser
           .parse(input)
           .map {
             case GameCommand.Menu       => State.Menu(Some(state), MenuFooterMessage.Empty)
             case GameCommand.Put(field) => takeField(field, state)
           }
-      }.map(_.toOption.getOrElse(state.copy(footerMessage = GameFooterMessage.InvalidCommand)))
+
+      Aborts[AppError]
+        .run(parseInput)
+        .map {
+          case Right(newState) => newState
+          case Left(_)         => state.copy(footerMessage = GameFooterMessage.InvalidCommand)
+        }
 
   private def isAiTurn(state: State.Game): Boolean =
     (state.turn == Piece.X && state.cross == Player.Ai) ||
       (state.turn == Piece.O && state.nought == Player.Ai)
 
   private def takeField(field: Field, state: State.Game): State > IOs =
-    Aborts[AppError].run {
+    val logic: State.Game > (Aborts[AppError] & IOs) =
       for
         updatedBoard  <- gameLogic.putPiece(state.board, field, state.turn)
         updatedResult <- gameLogic.gameResult(updatedBoard)
@@ -44,7 +50,13 @@ final class GameModeLive(
         turn = updatedTurn,
         footerMessage = GameFooterMessage.Empty
       )
-    }.map(_.toOption.getOrElse(state.copy(footerMessage = GameFooterMessage.FieldOccupied)))
+
+    Aborts[AppError]
+      .run(logic)
+      .map {
+        case Right(newState) => newState
+        case Left(_)         => state.copy(footerMessage = GameFooterMessage.FieldOccupied)
+      }
 
   def render(state: State.Game): String =
     val player = if state.turn == Piece.X then state.cross else state.nought
