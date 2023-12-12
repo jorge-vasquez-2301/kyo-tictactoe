@@ -1,13 +1,15 @@
 package com.example.tictactoe.parser.game
 
-import com.example.tictactoe.domain.{ AppError, Field, GameCommand }
+import com.example.tictactoe.domain.*
 import kyo.*
 import kyo.aborts.*
 import zio.parser.*
 
 final class GameCommandParserLive() extends GameCommandParser:
   def parse(input: String): GameCommand > Aborts[AppError] =
-    command.parseString(input).toOption.getOrElse(Aborts[AppError].fail(AppError.ParseError))
+    command.parseString(input) match
+      case Left(_)        => Aborts[AppError].fail(AppError.ParseError)
+      case Right(command) => command
 
   private lazy val command: Parser[String, Char, GameCommand] =
     menu.orElse(put)
