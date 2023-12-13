@@ -19,7 +19,7 @@ final class GameModeLive(
     if state.result != GameResult.Ongoing then State.Menu(None, MenuFooterMessage.Empty)
     else if isAiTurn(state) then opponentAi.randomMove(state.board).map(takeField(_, state))
     else
-      val parseInput =
+      val parseInput: State > (Aborts[AppError] & IOs) =
         gameCommandParser
           .parse(input)
           .map {
