@@ -17,6 +17,7 @@ import com.example.tictactoe.view.menu.MenuViewLive
 import kyo.*
 import kyo.concurrent.fibers.*
 import kyo.consoles.*
+import kyo.direct.*
 import kyo.envs.*
 import kyo.ios.*
 import kyo.options.*
@@ -32,7 +33,6 @@ object TicTacToe extends KyoApp:
       .run(TerminalLive()) {
         Envs[Controller].run[State, Envs[Terminal] & Consoles](controller)(program)
       }
-      .unit
 
   val program: State > (Envs[Terminal] & Envs[Controller] & Consoles) =
     def loop(state: State): State > (Envs[Terminal] & Envs[Controller] & Consoles) =
@@ -46,13 +46,13 @@ object TicTacToe extends KyoApp:
     loop(State.initial)
 
   def step(state: State): State > (Envs[Terminal] & Envs[Controller] & Options & Consoles) =
-    for
-      terminal   <- Envs[Terminal].get
-      controller <- Envs[Controller].get
-      _          <- terminal.display(controller.render(state))
-      input      <- if state == State.Shutdown then "" else terminal.getUserInput
-      nextState  <- controller.process(input, state)
-    yield nextState
+    defer {
+      val terminal   = await(Envs[Terminal].get)
+      val controller = await(Envs[Controller].get)
+      await(terminal.display(controller.render(state)))
+      val input      = if state == State.Shutdown then "" else await(terminal.getUserInput)
+      await(controller.process(input, state))
+    }
 
   val controller =
     val confirmCommandParser = ConfirmCommandParserLive()
