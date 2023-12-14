@@ -15,16 +15,19 @@ import com.example.tictactoe.view.confirm.ConfirmViewLive
 import com.example.tictactoe.view.game.GameViewLive
 import com.example.tictactoe.view.menu.MenuViewLive
 import kyo.*
+import kyo.concurrent.fibers.*
 import kyo.consoles.*
 import kyo.envs.*
 import kyo.ios.*
 import kyo.options.*
+import kyo.resources.*
+import kyo.tries.*
 import com.example.tictactoe.terminal.Terminal
 import com.example.tictactoe.controller.Controller
 
-object TicTacToe extends App:
+object TicTacToe extends KyoApp:
 
-  override def run(args: List[String]): Unit > App.Effects =
+  override def run: Any > (Fibers with Resources with Consoles with Tries) =
     Envs[Terminal]
       .run(TerminalLive()) {
         Envs[Controller].run[State, Envs[Terminal] & Consoles](controller)(program)
