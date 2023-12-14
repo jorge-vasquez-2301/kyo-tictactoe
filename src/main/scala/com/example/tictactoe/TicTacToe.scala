@@ -28,7 +28,7 @@ import com.example.tictactoe.controller.Controller
 
 object TicTacToe extends KyoApp:
 
-  override def run: Any > (Fibers with Resources with Consoles with Tries) =
+  override def run: Any > (Fibers & Resources & Consoles & Tries) =
     Envs[Terminal]
       .run(TerminalLive()) {
         Envs[Controller].run[State, Envs[Terminal] & Consoles](controller)(program)
