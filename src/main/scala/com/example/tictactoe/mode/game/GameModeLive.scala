@@ -38,7 +38,7 @@ final class GameModeLive(
     (state.turn == Piece.X && state.cross == Player.Ai) ||
       (state.turn == Piece.O && state.nought == Player.Ai)
 
-  private def takeField(field: Field, state: State.Game): State > IOs =
+  private def takeField(field: Field, state: State.Game): State.Game > IOs =
     val logic: State.Game > (Aborts[AppError] & IOs) =
       for
         updatedBoard  <- gameLogic.putPiece(state.board, field, state.turn)
@@ -51,12 +51,12 @@ final class GameModeLive(
         footerMessage = GameFooterMessage.Empty
       )
 
-    Aborts[AppError]
-      .run(logic)
-      .map {
-        case Right(newState) => newState
-        case Left(_)         => state.copy(footerMessage = GameFooterMessage.FieldOccupied)
-      }
+    val logicEither: Either[AppError, State.Game] > IOs = Aborts[AppError].run(logic)
+
+    logicEither.map {
+      case Right(newState) => newState
+      case Left(_)         => state.copy(footerMessage = GameFooterMessage.FieldOccupied)
+    }
 
   def render(state: State.Game): String =
     val player = if state.turn == Piece.X then state.cross else state.nought
