@@ -8,14 +8,19 @@ import kyo.aborts.*
 
 final class ConfirmModeLive(confirmCommandParser: ConfirmCommandParser, confirmView: ConfirmView) extends ConfirmMode:
   def process(input: String, state: State.Confirm): State =
-    Aborts[AppError].run {
+    val nextState: State > Aborts[AppError] =
       confirmCommandParser
         .parse(input)
         .map {
           case ConfirmCommand.Yes => state.confirmed
           case ConfirmCommand.No  => state.declined
         }
-    }.pure.toOption.getOrElse(state.copy(footerMessage = ConfirmFooterMessage.InvalidCommand))
+
+    Aborts[AppError]
+      .run(nextState)
+      .pure match
+      case Right(nextState) => nextState
+      case Left(_)          => state.copy(footerMessage = ConfirmFooterMessage.InvalidCommand)
 
   def render(state: State.Confirm): String =
     List(
