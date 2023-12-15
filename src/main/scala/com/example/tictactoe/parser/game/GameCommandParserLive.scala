@@ -12,7 +12,7 @@ final class GameCommandParserLive() extends GameCommandParser:
       case Right(command) => command
 
   private lazy val command: Parser[String, Char, GameCommand] =
-    menu.orElse(put)
+    menu <> put
 
   private lazy val menu: Parser[String, Char, GameCommand] =
     Parser.string("menu", GameCommand.Menu)
