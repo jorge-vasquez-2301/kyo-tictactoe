@@ -2,6 +2,9 @@ package com.example.tictactoe.view.game
 
 import com.example.tictactoe.domain.*
 
+import kyo.envs.*
+import kyo.layers.*
+
 final class GameViewLive() extends GameView:
   def header(result: GameResult, turn: Piece, player: Player): String =
     result match
@@ -38,3 +41,6 @@ final class GameViewLive() extends GameView:
       case GameFooterMessage.Empty          => ""
       case GameFooterMessage.InvalidCommand => "Invalid command. Try again."
       case GameFooterMessage.FieldOccupied  => "Field occupied. Try another."
+
+object GameViewLive:
+  val layer: Layer[Envs[GameView], Any] = Envs[GameView].layer(GameViewLive())

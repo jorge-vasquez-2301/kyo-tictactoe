@@ -3,6 +3,8 @@ package com.example.tictactoe.gameLogic
 import com.example.tictactoe.domain.*
 import kyo.*
 import kyo.aborts.*
+import kyo.envs.*
+import kyo.layers.*
 import kyo.ios.*
 
 final class GameLogicLive() extends GameLogic:
@@ -27,3 +29,6 @@ final class GameLogicLive() extends GameLogic:
     currentTurn match
       case Piece.X => Piece.O
       case Piece.O => Piece.X
+
+object GameLogicLive:
+  val layer: Layer[Envs[GameLogic], Any] = Envs[GameLogic].layer(GameLogicLive())

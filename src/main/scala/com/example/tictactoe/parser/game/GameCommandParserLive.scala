@@ -4,6 +4,8 @@ import com.example.tictactoe.domain.*
 import kyo.*
 import kyo.aborts.*
 import zio.parser.*
+import kyo.envs.*
+import kyo.layers.*
 
 final class GameCommandParserLive() extends GameCommandParser:
   def parse(input: String): GameCommand > Aborts[AppError] =
@@ -24,3 +26,6 @@ final class GameCommandParserLive() extends GameCommandParser:
                    case Some(field) => Parser.succeed(GameCommand.Put(field))
                    case None        => Parser.fail(s"Invalid field value: $digit")
     yield command
+
+object GameCommandParserLive:
+  val layer: Layer[Envs[GameCommandParser], Any] = Envs[GameCommandParser].layer(GameCommandParserLive())

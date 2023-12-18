@@ -5,6 +5,8 @@ import com.example.tictactoe.parser.menu.MenuCommandParser
 import com.example.tictactoe.view.menu.MenuView
 import kyo.*
 import kyo.aborts.*
+import kyo.envs.*
+import kyo.layers.*
 
 final class MenuModeLive(menuCommandParser: MenuCommandParser, menuView: MenuView) extends MenuMode:
   def process(input: String, state: State.Menu): State =
@@ -44,3 +46,12 @@ final class MenuModeLive(menuCommandParser: MenuCommandParser, menuView: MenuVie
       menuView.content(state.game.nonEmpty),
       menuView.footer(state.footerMessage)
     ).mkString("\n\n")
+
+object MenuModeLive:
+  val layer: Layer[Envs[MenuMode], Envs[MenuCommandParser] & Envs[MenuView]] =
+    Envs[MenuMode].layer {
+      for
+        menuCommandParser <- Envs[MenuCommandParser].get
+        menuView          <- Envs[MenuView].get
+      yield MenuModeLive(menuCommandParser, menuView)
+    }

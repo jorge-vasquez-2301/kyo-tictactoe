@@ -5,7 +5,9 @@ import com.example.tictactoe.mode.confirm.ConfirmMode
 import com.example.tictactoe.mode.game.GameMode
 import com.example.tictactoe.mode.menu.MenuMode
 import kyo.*
+import kyo.envs.*
 import kyo.ios.*
+import kyo.layers.*
 import kyo.options.*
 
 final class ControllerLive(confirmMode: ConfirmMode, gameMode: GameMode, menuMode: MenuMode) extends Controller:
@@ -22,3 +24,13 @@ final class ControllerLive(confirmMode: ConfirmMode, gameMode: GameMode, menuMod
       case s: State.Game    => gameMode.render(s)
       case s: State.Menu    => menuMode.render(s)
       case State.Shutdown   => "Shutting down..."
+
+object ControllerLive:
+  val layer: Layer[Envs[Controller], Envs[ConfirmMode] & Envs[GameMode] & Envs[MenuMode]] =
+    Envs[Controller].layer {
+      for
+        confirmMode <- Envs[ConfirmMode].get
+        gameMode    <- Envs[GameMode].get
+        menuMode    <- Envs[MenuMode].get
+      yield ControllerLive(confirmMode, gameMode, menuMode)
+    }

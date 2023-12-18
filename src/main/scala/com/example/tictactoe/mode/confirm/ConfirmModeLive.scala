@@ -5,6 +5,8 @@ import com.example.tictactoe.parser.confirm.ConfirmCommandParser
 import com.example.tictactoe.view.confirm.ConfirmView
 import kyo.*
 import kyo.aborts.*
+import kyo.envs.*
+import kyo.layers.*
 
 final class ConfirmModeLive(confirmCommandParser: ConfirmCommandParser, confirmView: ConfirmView) extends ConfirmMode:
   def process(input: String, state: State.Confirm): State =
@@ -28,3 +30,12 @@ final class ConfirmModeLive(confirmCommandParser: ConfirmCommandParser, confirmV
       confirmView.content,
       confirmView.footer(state.footerMessage)
     ).mkString("\n\n")
+
+object ConfirmModeLive:
+  val layer: Layer[Envs[ConfirmMode], Envs[ConfirmCommandParser] & Envs[ConfirmView]] =
+    Envs[ConfirmMode].layer {
+      for
+        confirmCommandParser <- Envs[ConfirmCommandParser].get
+        confirmView          <- Envs[ConfirmView].get
+      yield ConfirmModeLive(confirmCommandParser, confirmView)
+    }

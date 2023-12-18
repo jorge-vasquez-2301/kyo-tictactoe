@@ -7,6 +7,8 @@ import com.example.tictactoe.parser.game.GameCommandParser
 import com.example.tictactoe.view.game.GameView
 import kyo.*
 import kyo.aborts.*
+import kyo.envs.*
+import kyo.layers.*
 import kyo.ios.*
 
 final class GameModeLive(
@@ -65,3 +67,14 @@ final class GameModeLive(
       gameView.content(state.board, state.result),
       gameView.footer(state.footerMessage)
     ).mkString("\n\n")
+
+object GameModeLive:
+  val layer: Layer[Envs[GameMode], Envs[GameCommandParser] & Envs[GameView] & (Envs[OpponentAi] & Envs[GameLogic])] =
+    Envs[GameMode].layer {
+      for
+        gameCommandParser <- Envs[GameCommandParser].get
+        gameView          <- Envs[GameView].get
+        opponentAi        <- Envs[OpponentAi].get
+        gameLogic         <- Envs[GameLogic].get
+      yield GameModeLive(gameCommandParser, gameView, opponentAi, gameLogic)
+    }
