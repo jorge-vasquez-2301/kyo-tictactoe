@@ -69,7 +69,7 @@ final class GameModeLive(
     ).mkString("\n\n")
 
 object GameModeLive:
-  val layer: Layer[Envs[GameMode], Envs[GameCommandParser] & Envs[GameView] & (Envs[OpponentAi] & Envs[GameLogic])] =
+  val layer: Layer[Envs[GameMode], Envs[GameCommandParser] & Envs[GameView] & Envs[OpponentAi] & Envs[GameLogic]] =
     Envs[GameMode].layer {
       for
         gameCommandParser <- Envs[GameCommandParser].get
