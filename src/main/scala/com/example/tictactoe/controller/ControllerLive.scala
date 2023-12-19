@@ -11,7 +11,7 @@ import kyo.layers.*
 import kyo.options.*
 
 final class ControllerLive(confirmMode: ConfirmMode, gameMode: GameMode, menuMode: MenuMode) extends Controller:
-  def process(input: String, state: State): State > (Options & IOs) =
+  def process(input: String, state: State): State < (Options & IOs) =
     state match
       case s: State.Confirm => confirmMode.process(input, s)
       case s: State.Game    => gameMode.process(input, s)

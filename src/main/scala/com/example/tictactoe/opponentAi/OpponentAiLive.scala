@@ -8,7 +8,7 @@ import kyo.envs.*
 import kyo.layers.*
 
 final class OpponentAiLive() extends OpponentAi:
-  override def randomMove(board: Board): Field > IOs =
+  override def randomMove(board: Board): Field < IOs =
     val unoccupied = board.unoccupiedFields
     board.unoccupiedFields.size match
       case 0 => IOs.fail(IllegalStateException("Board is full"))

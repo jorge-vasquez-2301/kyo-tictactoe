@@ -7,7 +7,7 @@ import kyo.envs.*
 import kyo.layers.*
 
 final class MenuCommandParserLive() extends MenuCommandParser:
-  override def parse(input: String): MenuCommand > Aborts[AppError] =
+  override def parse(input: String): MenuCommand < Aborts[AppError] =
     input match
       case "new game" => MenuCommand.NewGame
       case "resume"   => MenuCommand.Resume

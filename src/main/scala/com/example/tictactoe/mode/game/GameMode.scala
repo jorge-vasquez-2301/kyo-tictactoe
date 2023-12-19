@@ -5,5 +5,5 @@ import kyo.*
 import kyo.ios.*
 
 trait GameMode:
-  def process(input: String, state: State.Game): State > IOs
+  def process(input: String, state: State.Game): State < IOs
   def render(state: State.Game): String

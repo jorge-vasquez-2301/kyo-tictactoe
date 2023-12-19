@@ -8,7 +8,7 @@ import kyo.layers.*
 import zio.parser.*
 
 final class GameCommandParserLive() extends GameCommandParser:
-  def parse(input: String): GameCommand > Aborts[AppError] =
+  def parse(input: String): GameCommand < Aborts[AppError] =
     command.parseString(input) match
       case Left(_)        => Aborts[AppError].fail(AppError.ParseError)
       case Right(command) => command

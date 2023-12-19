@@ -5,4 +5,4 @@ import kyo.*
 import kyo.aborts.*
 
 trait GameCommandParser:
-  def parse(input: String): GameCommand > Aborts[AppError]
+  def parse(input: String): GameCommand < Aborts[AppError]

@@ -7,7 +7,7 @@ import kyo.envs.*
 import kyo.layers.*
 
 final class ConfirmCommandParserLive() extends ConfirmCommandParser:
-  def parse(input: String): ConfirmCommand > Aborts[AppError] =
+  def parse(input: String): ConfirmCommand < Aborts[AppError] =
     input match
       case "yes" => ConfirmCommand.Yes
       case "no"  => ConfirmCommand.No

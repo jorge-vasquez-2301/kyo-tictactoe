@@ -17,11 +17,11 @@ final class GameModeLive(
   opponentAi: OpponentAi,
   gameLogic: GameLogic
 ) extends GameMode:
-  def process(input: String, state: State.Game): State > IOs =
+  def process(input: String, state: State.Game): State < IOs =
     if state.result != GameResult.Ongoing then State.Menu(None, MenuFooterMessage.Empty)
     else if isAiTurn(state) then opponentAi.randomMove(state.board).map(takeField(_, state))
     else
-      val parseInput: State > (Aborts[AppError] & IOs) =
+      val parseInput: State < (Aborts[AppError] & IOs) =
         gameCommandParser
           .parse(input)
           .map {
@@ -40,8 +40,8 @@ final class GameModeLive(
     (state.turn == Piece.X && state.cross == Player.Ai) ||
       (state.turn == Piece.O && state.nought == Player.Ai)
 
-  private def takeField(field: Field, state: State.Game): State.Game > IOs =
-    val logic: State.Game > (Aborts[AppError] & IOs) =
+  private def takeField(field: Field, state: State.Game): State.Game < IOs =
+    val logic: State.Game < (Aborts[AppError] & IOs) =
       for
         updatedBoard  <- gameLogic.putPiece(state.board, field, state.turn)
         updatedResult <- gameLogic.gameResult(updatedBoard)
@@ -53,7 +53,7 @@ final class GameModeLive(
         footerMessage = GameFooterMessage.Empty
       )
 
-    val logicEither: Either[AppError, State.Game] > IOs = Aborts[AppError].run(logic)
+    val logicEither: Either[AppError, State.Game] < IOs = Aborts[AppError].run(logic)
 
     logicEither.map {
       case Right(newState) => newState

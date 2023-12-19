@@ -4,5 +4,5 @@ import kyo.*
 import kyo.ios.*
 
 trait Terminal:
-  def getUserInput: String > IOs
-  def display(frame: String): Unit > IOs
+  def getUserInput: String < IOs
+  def display(frame: String): Unit < IOs

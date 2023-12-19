@@ -9,9 +9,9 @@ import kyo.layers.*
 final class TerminalLive() extends Terminal:
   import TerminalLive.*
 
-  override val getUserInput: String > IOs = Consoles.readln
+  override val getUserInput: String < IOs = Consoles.readln
 
-  override def display(frame: String): Unit > IOs =
+  override def display(frame: String): Unit < IOs =
     Consoles.print(ansiClearScreen).andThen(Consoles.println(frame))
 
 object TerminalLive:

@@ -6,6 +6,6 @@ import kyo.aborts.*
 import kyo.ios.*
 
 trait GameLogic:
-  def putPiece(board: Board, field: Field, piece: Piece): Board > Aborts[AppError]
-  def gameResult(board: Board): GameResult > IOs
+  def putPiece(board: Board, field: Field, piece: Piece): Board < Aborts[AppError]
+  def gameResult(board: Board): GameResult < IOs
   def nextTurn(currentTurn: Piece): Piece

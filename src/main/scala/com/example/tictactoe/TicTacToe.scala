@@ -35,9 +35,9 @@ import com.example.tictactoe.gameLogic.GameLogic
 import com.example.tictactoe.parser.game.GameCommandParser
 
 object TicTacToe extends KyoApp:
-  val program: State > (Envs[Terminal] & Envs[Controller] & IOs) =
-    def step(state: State): Option[State] > (Envs[Terminal] & Envs[Controller] & IOs) =
-      val nextState: State > (Envs[Terminal] & Envs[Controller] & IOs & Options) =
+  val program: State < (Envs[Terminal] & Envs[Controller] & IOs) =
+    def step(state: State): Option[State] < (Envs[Terminal] & Envs[Controller] & IOs) =
+      val nextState: State < (Envs[Terminal] & Envs[Controller] & IOs & Options) =
         defer {
           val terminal   = await(Envs[Terminal].get)
           val controller = await(Envs[Controller].get)
@@ -48,7 +48,7 @@ object TicTacToe extends KyoApp:
 
       Options.run(nextState)
 
-    def loop(state: State): State > (Envs[Terminal] & Envs[Controller] & IOs) =
+    def loop(state: State): State < (Envs[Terminal] & Envs[Controller] & IOs) =
       IOs {
         step(state).map {
           case Some(nextState) => loop(nextState)

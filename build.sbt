@@ -2,7 +2,7 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 
 ThisBuild / scalaVersion := "3.3.1"
 
-val kyoVersion = "0.7.9"
+val kyoVersion = "0.8.0"
 
 lazy val root = (project in file("."))
   .settings(

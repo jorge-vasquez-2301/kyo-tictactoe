@@ -10,7 +10,7 @@ import kyo.layers.*
 
 final class ConfirmModeLive(confirmCommandParser: ConfirmCommandParser, confirmView: ConfirmView) extends ConfirmMode:
   def process(input: String, state: State.Confirm): State =
-    val nextState: State > Aborts[AppError] =
+    val nextState: State < Aborts[AppError] =
       confirmCommandParser
         .parse(input)
         .map {
